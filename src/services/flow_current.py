@@ -126,6 +126,9 @@ class CurrentFlowClientMixin:
     ) -> dict:
         if str(google_cookies or "").strip():
             validate_flow_cookie_storage(google_cookies)
+        google_cookies = await self._resolve_flow_frontend_cookie_storage(
+            google_cookies=google_cookies, token_id=token_id
+        )
         credits = await self.get_credits(
             self.FRONTEND_ACCESS_TOKEN,
             google_cookies=google_cookies,
@@ -138,6 +141,7 @@ class CurrentFlowClientMixin:
             "user": {},
             "credits": credits.get("credits", 0),
             "userPaygateTier": credits.get("userPaygateTier"),
+            "google_cookies": self.get_updated_flow_cookies(google_cookies),
         }
 
     async def create_project(

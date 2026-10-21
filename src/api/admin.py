@@ -2731,6 +2731,7 @@ async def plugin_update_token(
             "",
             google_cookies=google_cookies,
         )
+        google_cookies = result.get("google_cookies") or google_cookies
         at = result["access_token"]
         expires = result.get("expires")
         at_expires = None
@@ -2764,6 +2765,7 @@ async def plugin_update_token(
                 protocol_mode=request.protocol_mode,
                 google_cookies=google_cookies,
                 login_account=email,
+                auto_enable_on_update=plugin_config.auto_enable_on_update,
             )
             await token_manager.mark_cookie_validated(existing_token.id, email)
 
